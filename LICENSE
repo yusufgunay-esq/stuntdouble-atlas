@@ -1,0 +1,16 @@
+# Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Yusuf Günay.
+
+All data in this repository (`games/`, `schema/`, this file's subject matter) is licensed under the
+Creative Commons Attribution 4.0 International License.
+
+You may share and adapt the data for any purpose, including commercially, provided you give
+appropriate credit to **Yusuf Günay**, link to the license, and indicate if changes were made.
+
+Official legal text: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+The validator and tooling in `tools/` are offered under the same terms for simplicity; they contain
+no game code. The Stuntdouble source code itself lives in
+https://github.com/yusufgunay-esq/stuntdouble under MPL-2.0.

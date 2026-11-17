@@ -1,0 +1,21 @@
+{
+  "atlasVersion": 1,
+  "game": "assassins-creed-odyssey",
+  "source": "tuned",
+  "profile": {
+    "aggression": 0.62,
+    "discipline": 0.48,
+    "cinematicFlair": 0.8,
+    "reactionDelayMs": 220,
+    "preferredRange": 3.2,
+    "defaultPresentationMode": "CINEMATIC_LIVE",
+    "archetype": "SPARTAN_MISTHIOS"
+  },
+  "seams": [
+    "combat.wind_up_window",
+    "combat.parry_timing"
+  ],
+  "tuning": {
+    "parryWindowMs": 260
+  }
+}

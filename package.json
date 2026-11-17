@@ -1,0 +1,16 @@
+{
+  "name": "stuntdouble-atlas",
+  "private": true,
+  "description": "Consented, validated game-data bundles for Stuntdouble. Data only: no code, no binaries, no personal data.",
+  "license": "CC-BY-4.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

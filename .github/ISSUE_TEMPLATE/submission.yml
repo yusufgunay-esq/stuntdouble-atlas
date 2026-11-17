@@ -1,0 +1,39 @@
+name: Game data submission
+description: Send one JSON bundle (profile, seams, tuning). Validated automatically; merged without human review.
+title: "[submission] "
+labels: ["submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Rules.** JSON only, at most 256 KB. No URLs, file paths, personal data, keys, binaries,
+        game files, decompiled code or assets. The bundle schema is
+        [schema/bundle.schema.json](https://github.com/yusufgunay-esq/stuntdouble-atlas/blob/main/schema/bundle.schema.json).
+        Data is published publicly under CC BY 4.0 and read by agents as data, never executed.
+  - type: input
+    id: game
+    attributes:
+      label: Game slug
+      description: Lowercase words joined by hyphens; also used as the folder name.
+      placeholder: ghost-recon-breakpoint
+    validations:
+      required: true
+  - type: textarea
+    id: bundle
+    attributes:
+      label: JSON bundle
+      description: Paste exactly one JSON object. A ```json fenced block is preferred.
+      render: json
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Consent (all three required)
+      options:
+        - label: I created this bundle from my own play or tuning and I have the right to share it.
+          required: true
+        - label: It contains no personal data, game files, decompiled code or copyrighted assets.
+          required: true
+        - label: I agree it is published publicly under CC BY 4.0 and may be merged automatically.
+          required: true

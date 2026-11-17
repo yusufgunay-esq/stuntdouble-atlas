@@ -1,0 +1,89 @@
+name: intake
+
+on:
+  issues:
+    types: [opened, reopened, labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: atlas-intake
+  cancel-in-progress: false
+
+jobs:
+  intake:
+    if: >-
+      contains(github.event.issue.labels.*.name, 'submission') &&
+      github.event.issue.state == 'open' &&
+      !contains(github.event.issue.labels.*.name, 'accepted') &&
+      !contains(github.event.issue.labels.*.name, 'rejected')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Ensure labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create submission --force >/dev/null || true
+          gh label create accepted --force >/dev/null || true
+          gh label create rejected --force >/dev/null || true
+
+      - name: Fetch issue body
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}" --jq .body > "$RUNNER_TEMP/issue.md"
+
+      - name: Extract JSON and check consent
+        run: |
+          node tools/ingest-issue.mjs --body "$RUNNER_TEMP/issue.md" --output "$RUNNER_TEMP/bundle.json" \
+            > "$RUNNER_TEMP/ingest.txt" 2>&1
+          cat "$RUNNER_TEMP/ingest.txt"
+
+      - name: Validate
+        run: |
+          node tools/validate-submission.mjs "$RUNNER_TEMP/bundle.json" --games games \
+            > "$RUNNER_TEMP/validate.txt" 2>&1
+          cat "$RUNNER_TEMP/validate.txt"
+
+      - name: Merge into games/
+        run: |
+          node tools/merge-submission.mjs "$RUNNER_TEMP/bundle.json" --repo . \
+            --at "${{ github.event.issue.created_at }}" > "$RUNNER_TEMP/merge.txt" 2>&1
+          cat "$RUNNER_TEMP/merge.txt"
+
+      - name: Commit and push
+        run: |
+          git config user.name "stuntdouble-atlas-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add games
+          git commit -m "atlas: accept submission from issue #${{ github.event.issue.number }}"
+          git push
+
+      - name: Accept comment and close
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$ISSUE" --body "Accepted and merged. Thank you."
+          gh issue edit "$ISSUE" --add-label accepted
+          gh issue close "$ISSUE"
+
+      - name: Reject with reason
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          REASON=$(cat "$RUNNER_TEMP/validate.txt" "$RUNNER_TEMP/ingest.txt" "$RUNNER_TEMP/merge.txt" 2>/dev/null | grep -m1 '^E_' || true)
+          [ -n "$REASON" ] || REASON="E_UNKNOWN: see workflow log"
+          gh issue comment "$ISSUE" --body "Rejected: ${REASON}. Fix the bundle and open a new submission."
+          gh issue edit "$ISSUE" --add-label rejected
+          gh issue close "$ISSUE" --reason "not planned"

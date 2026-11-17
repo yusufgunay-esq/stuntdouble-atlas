@@ -1,0 +1,16 @@
+{
+  "atlasVersion": 1,
+  "game": "ghost-recon-breakpoint",
+  "source": "derived",
+  "profile": {
+    "aggression": 0.5,
+    "discipline": 0.5,
+    "cinematicFlair": 0.5,
+    "reactionDelayMs": 200,
+    "preferredRange": 10,
+    "defaultPresentationMode": "TACTICAL"
+  },
+  "tuning": {
+    "a": { "b": { "c": { "d": { "e": { "f": { "g": { "h": 1 } } } } } } }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "atlasVersion": 1,
+  "game": "ghost-recon-breakpoint",
+  "source": "observed",
+  "profile": {
+    "aggression": 0.5,
+    "discipline": 0.5,
+    "cinematicFlair": 0.5,
+    "reactionDelayMs": 200,
+    "preferredRange": 10,
+    "defaultPresentationMode": "TACTICAL"
+  },
+  "notes": "My capture token is sk-abcdefghijklmnop1234 and it leaked here."
+}

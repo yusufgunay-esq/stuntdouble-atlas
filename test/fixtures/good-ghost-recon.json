@@ -1,0 +1,24 @@
+{
+  "atlasVersion": 1,
+  "game": "ghost-recon-breakpoint",
+  "source": "observed",
+  "observedSeconds": 5400,
+  "profile": {
+    "aggression": 0.55,
+    "discipline": 0.72,
+    "cinematicFlair": 0.35,
+    "reactionDelayMs": 180,
+    "preferredRange": 18.5,
+    "defaultPresentationMode": "TACTICAL",
+    "archetype": "TACTICAL_OPERATIVE"
+  },
+  "seams": [
+    "native_ai.engagement_radius",
+    "camera.shoulder_offset"
+  ],
+  "tuning": {
+    "engageRadiusM": 25,
+    "handBackDelayMs": 2000
+  },
+  "notes": "Native AI retreats below 25 percent health; parity restored with ASSIST overlap."
+}
